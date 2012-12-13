@@ -1,9 +1,9 @@
 <div class="tform">
-<H2> Topic Details</H2>
+<H2>Topic Details</H2>
   <table width=100% >
 
 	<tr>
-		<td class="leftcol"><label for="subject_id">Subject</label></td>
+		<td width=23%><label for="subject_id"><font size=2>&nbsp;Subject</font></label></td>
 		<td><b>:</b></td>
 		<td><%= f.collection_select :subject_id, Subject.find(:all), :id, :subject_code_with_subject_name, :include_blank => true %></td>
 	</tr>
@@ -29,36 +29,93 @@
 		    <%= f.select :duramins, options_for_select([0,15,30,45], @topic.duramins) %>
 		    <font color=#AAA size=-2>Hours:Minutes</font></td>
 	</tr>
+</table>
+<H2>Training Plan Details</H2>
+<table width=100%>
 	<tr>
-		<td class="leftcol"><label for="version">Version No</label></td>
+		<td width=23%><label for="version"><font size=2>&nbsp;Organization</font></label></td>
 		<td><b>:</b></td>
-		<td><%= f.text_field :version %></td>
+		<td><%= f.text_field :organisation %></td>
 	</tr>
 	<tr>
-		<td class="leftcol"><label for="objective">Objective</label></td>
+		<td class="leftcol"><label for="version">Department</label></td>
 		<td><b>:</b></td>
-		<td><%= f.text_area :objective, :size => '45x3' %></td>
+		<td><%= f.text_field :department %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="version">Date</label></td>
+		<td><b>:</b></td>
+		<td><%= f.date_select :date_plan, :start_year => 2012, :end_year => 2020, :order => [:day, :month, :year] %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Trainer/Lecturer</label></td>
+		<td><b>:</b></td>
+		<td><%= f.collection_select :creator_id, Staff.find(:all, :include => [:title], :order => 'titles.id ASC'), :id, :staff_name_with_title, :include_blank => true %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Learners/Trainees</label></td>
+		<td><b>:</b></td>
+		<td><%= f.collection_select :class_id, Klass.find(:all), :id, :name, :include_blank => true %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Location</label></td>
+		<td><b>:</b></td>
+		<td><%= f.collection_select :location_id, Location.find(:all,  :conditions => {:typename => 6}, :order => :id), :id, :location_list, :include_blank => true %></td>
+	</tr>
+	
+   	<tr>
+		<td class="leftcol"><label for="activity">Learning Outcomes</label></td>
+		<td><b>:</b></td>
+		<td><%= f.text_area :learning_outcome, :size => '45x5' %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="version">The Training Methods I will use</label></td>
+		<td><b>:</b></td>
+		<td><%= f.text_area :version, :size => '45x5' %></td>
 	</tr>
 	<tr>
-		<td class="leftcol"><label for="content">Content</label></td>
+		<td class="leftcol"><label for="objective">My introduction to this training will include</label></td>
+		<td><b>:</b></td>
+		<td><%= f.text_area :objective, :size => '45x5' %></td>
+	</tr>
+	<tr>
+		<td class="leftcol"><label for="content">The main points I will cover in the body (content) of my training will be</label></td>
 		<td><b>:</b></td>
 		<td><%= f.text_area :content, :size => '45x5' %></td>
 	</tr>
 	<tr>
-		<td class="leftcol"><label for="activity">Activity</label></td>
+		<td class="leftcol"><label for="activity">My conclusion/summary will cover</label></td>
 		<td><b>:</b></td>
-		<td><%= f.text_area :activity, :size => '45x3' %></td>
+		<td><%= f.text_area :activity, :size => '45x5' %></td>
 	</tr>
+
 	<tr>
-		<td class="leftcol"><label for="creator_id">Created By</label></td>
+		<td class="leftcol"><label for="activity">How I will assess competencies</label></td>
 		<td><b>:</b></td>
-		<td><%= f.collection_select :creator_id, Staff.find(:all), :id, :staff_name_with_title, :include_blank => true %></td>
+		<td><%= f.text_area :competency, :size => '45x5' %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="activity">Things that I will need to organise before I do my training</label></td>
+		<td><b>:</b></td>
+		<td><%= f.text_area :organise_training, :size => '45x5' %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="activity">The resources, materials and training aids I will need</label></td>
+		<td><b>:</b></td>
+		<td><%= f.text_area :material_training, :size => '45x5' %></td>
 	</tr>
 </table>
 
 <table width=100%>
 		<tr>
-			<td class="leftcol">Training Notes</td>
+			<td width=23%><font size=2>&nbsp;Training Notes</font></td>
 			<td><b>:</b></td>
 			<td>
 			<div>
@@ -69,9 +126,25 @@
 					</div></td>
 			</tr>	
 </table>
+<H2>Lesson Plan</H2>
+<div>
+<table width=100% border=1 cellspacing=0>
+		<tr>
+			<th width=10%>Timing</td>
+			<th width=30%>Learning Objective</th>
+			<th width=45%>Main Tasks/Process</th>
+			<th width=10%>Resources</th>
+			<th width=5%></th>
+		</tr>
+		</table>
+			<% f.fields_for :lesson_plans do |builder| %>
+			<%= render 'lesson_plan_fields', :f => builder %>
+				<% end %>
+			<p><%= link_to_add_fields image_tag("add.png", :border => 0, :title => 'Add Q'), f, :lesson_plans %> - Add More </p>
+</div>
 <table width=100%>
 <tr>
-	<td class="leftcol"><label for="approvedby_id">Approved By</label></td>
+	<td width=23%><label for="approvedby_id"><font size=2>&nbsp;Approved By</font></label></td>
 	<td><b>:</b></td>
 	<td><%= f.collection_select :approvedby_id, Position.find(:all, :conditions => {:unit => "Ketua Unit Pengajar"} ), :id, :unit_staff_name, :include_blank => true %></td>
 </tr>

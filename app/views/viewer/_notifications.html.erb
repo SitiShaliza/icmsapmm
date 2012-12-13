@@ -9,7 +9,16 @@
   		<% else %>
     	<%= dash_leave %> <%= link_to "Leave Application for Approval", { :controller => "leaveforstaffs", :action => "index" } %><br>
   	<% end %>
+    
+    <!-- Notification for Instructor Appraisal-->
+    <% c = User.find(:all, :select => "id", :conditions => ['roles.id =?', 19], :include => :roles).map(&:id) %>
+    <% d = User.current_user.id.to_a %>
+    <% dash_ip = Instructor.count(:all, :conditions => ["qcsent =?", true]) %>
 
+	<% if (d & c == c) && dash_ip > 0 %>
+  <p><%= dash_ip %> <%= link_to "Instructor Appraisal for Check", { :controller => "instructors", :action => "index" } %></p>
+  <% else %>
+	<% end %>
   	<!-- Notification for Travel Request -->
    
   	<% c = Position.find(:all, :select => "positionname", :conditions => ['positions.id =?', 51]).map(&:positionname) %>
@@ -51,7 +60,8 @@
 	<!-- Notification for Staff Apply Stock -->
 	<% a = Stock.count(:all, :conditions => ["approver_id=? AND status=?", User.current_user.staff_id, 1]) %>
 	<% b = Stock.count(:all, :conditions => ["storeman_id=? AND status=?", User.current_user.staff_id, 2]) %>
-	<% dash_stock = a+b %>
+	<% c = Stock.count(:all, :conditions => ["staff_id=? AND status=?", User.current_user.staff_id, 4]) %>
+	<% dash_stock = a+b+c %>
   	<% if dash_stock == 0 %>
   		<% else %>
     	<%= dash_stock %> <%= link_to "New Stationery Application for Approval", { :controller => "stocks", :action => "index" } %><br>
@@ -104,6 +114,13 @@
 	
 	<!-- Notification for Documents-->
 	<% mydocs = Document.count(:all, :conditions => ["cc1staff_id=? AND cc1action IS ? ", User.current_user.staff_id, nil]) %>
+  <% if mydocs > 0 %>
+  	<%= mydocs %> <%= link_to "New Documents for Your Attention", { :controller => "documents", :action => "index" } %><br>
+  <% else %>
+	<% end %>
+	
+	<!-- Notification for Documents (CC2 Staff)-->
+	<% mydocs = Circulate.count(:all, :conditions => ["cc_staff=?", User.current_user.staff_id]) %>
   <% if mydocs > 0 %>
   	<%= mydocs %> <%= link_to "New Documents for Your Attention", { :controller => "documents", :action => "index" } %><br>
   <% else %>

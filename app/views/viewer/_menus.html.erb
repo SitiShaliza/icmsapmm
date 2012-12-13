@@ -12,9 +12,14 @@
 		<li><%= link_to (t 'menu.staffattendance'), 	{:controller => 'attendances', 	  :action => 'index'} %></li> <!-- Staff Attendance-->
 		<% end %>
 		
-		<% permitted_to? :manage, :evaluate_coaches do %>
-		<li><%= link_to (t 'menu.instructor'), 	  		{:controller => 'evaluate_coaches', :action => 'index'} %></li><!--Instructor Appraisal-->
-	    <% end %>
+		<% permitted_to? :menu, :instructors do %>
+		<li><a href="#"><%= t 'menu.instructor' %> ></a><!-- Staff Leave-->
+		<ul class="sub_menu">
+			<li><%= link_to (t 'menu.instructor'), 	  		{:controller => 'instructors', :action => 'index'} %></li><!--Instructor Appraisal-->
+			<li><%= link_to 'Laporan Penilaian Jurulatih', 	{:controller => 'evaluate_coaches', 	:action => 'report_evaluate_instructor'} %></li>
+	   	</ul>
+		</li>
+		<% end %>
 		
 		<% permitted_to? :manage, :staffs do %>
 		<li><%= link_to (t 'menu.task'), 		        {:controller => 'positions', 	:action => 'index'} %></li><!-- Task & Responsibilities-->
@@ -23,8 +28,9 @@
 		<% permitted_to? :menu, :staffs do %>
 		<li><a href="#"><%= t 'menu.leave' %> ></a><!-- Staff Leave-->
 			<ul class="sub_menu">
-				<li><%= link_to (t 'menu.approve'), 	{:controller => 'leaveforstaffs', 	:action => 'index'} %></li><!--Lists of Leave-->
 				<li><%= link_to (t 'menu.apply'), 		{:controller => 'leaveforstaffs', 	:action => 'new'} %></li><!--Staff Apply Leave-->
+				<li><%= link_to (t 'menu.approve'), 	{:controller => 'leaveforstaffs', 	:action => 'index'} %></li><!--Lists of Leave-->
+				
 			</ul>
 		</li>
 		<% end %>
@@ -53,7 +59,6 @@
 			<ul class="sub_menu">
 				<li><%= link_to 'Maklumat Perjawatan',      	{:controller => 'positions', 	:action => 'maklumat_perjawatan_LA'} %></li>
 				<li><%= link_to 'Laporan Harian Cuti Staf', 	{:controller => 'leaveforstaffs', 	:action => 'laporan_cuti'} %></li>
-				<li><%= link_to 'Laporan Penilaian Jurulatih', 	{:controller => 'evaluate_coaches', 	:action => 'report_evaluate_instructor'} %></li>
 			</ul>
 		</li>
 		<% end %>
@@ -134,9 +139,9 @@
 	<li><a href="#"><%= t 'menu.exam' %></a>
 		<ul class="sub_menu">
 			<li><%= link_to (t 'menu.examdev'),     {:controller => 'examquestions', :action => 'index'} %></li><!--Examination Question Bank-->
-			<% permitted_to? :manage, :exammakers do %>	
+			<%# permitted_to? :manage, :exammakers do %>	
 			<li><%= link_to 'Examination Maker',    {:controller => 'exammakers',    :action => 'index'} %></li><!--Examination Maker-->
-			<% end %>
+			<%# end %>
 			<% permitted_to? :menu, :grades do %>
 				<li><a href="#">Examination Grades ></a>
 					<ul class="sub_menu">
@@ -146,9 +151,17 @@
 					</ul>
 				</li>
 			 <% end %>
-			 <% permitted_to? :menu, :analysis_grades do %>
-			<li><%= link_to 'Analysis Result Exam', {:controller => 'analysis_grades', :action => 'index'} %></li><!--Analysis Result Exam-->
-		    <% end %>
+			<% permitted_to? :menu, :analysis_grades do %>
+					<li><a href="#">Analysis Examinations ></a>
+						<ul class="sub_menu">
+								<li><%#= link_to 'Analysis Result Exam', {:controller => 'analysis_grades', :action => 'index'} %></li>
+								<li><%= link_to 'By Examination Paper', {:controller => 'analysispaperexams', :action => 'index'} %></li>
+							<!--	<li><#%= link_to 'By Programmes', 	{:controller => 'examresults', :action => 'index'} %></li>
+								<li><#%= link_to 'By Examinations (paper)', 	{:controller => 'exammarks', :action => 'index'} %></li>-->
+						</ul>
+					</li>
+			<% end %>
+			
 			<% permitted_to? :create, :evaluate_lecturers do %>
 			<li><a href="#"><%= t 'menu.lecturer' %> ></a>
 			<ul class="sub_menu">

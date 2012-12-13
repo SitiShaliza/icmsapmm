@@ -45,6 +45,9 @@
     <td width=10px ><%= link_to image_tag("document.png", :border => 0), :action => 'show', :id => topic %></td>
     <td width=10px><%= link_to image_tag("edit.png", :border => 0), :action => 'edit', :id => topic %></td>
     <td width=10px><%= link_to image_tag("delete.png", :border => 0, :title => 'Delete'), topic, :confirm => 'Are you sure?', :method => :delete %></td>
+	<td width=10px>
+		<%= link_to image_tag("printer.png", :border => 0, :title => 'Borang Rancang Mengajar'), :action => 'lesson_plan', :id => topic %>
+	</td>
 		  </tr>
 		<% end %>
 		<% end %>

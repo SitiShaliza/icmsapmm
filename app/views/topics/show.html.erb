@@ -1,9 +1,9 @@
 <div class="tform">
-	<H2>Topics</H2>
+<H2>Topic Topic</H2>
 <table width=100%>
 	
 	<tr>
-		<td class="leftcol"><label for="subject_id">Subject</label></td>
+		<td width=23%><label for="subject_id"><font size=2>Subject</font></label></td>
 		<td width=3%><b>:</b></td>
 		<td><%=h @topic.subject_details %></td>
 	</tr>
@@ -33,66 +33,137 @@
 		<td><b>:</b></td>
 		<td><%=h @topic.durahours %>:<%=h @topic.duramins %> Hours</td>
 	</tr>
-	
+</table>
+<H2>Training Plan Details</H2>
+<table width=100% border=0>
 	<tr>
-		<td class="leftcol"><label for="version">Version No</label></td>
+		<td width=23%><label for="version"><font size=2>&nbsp;Organization</font></label></td>
 		<td><b>:</b></td>
-		<td> <%=h @topic.version %></td>
+		<td><%=h @topic.organisation %></td>
+	</tr>
+	<tr>
+		<td class="leftcol"><label for="version">Department</label></td>
+		<td><b>:</b></td>
+		<td><%=h @topic.department %></td>
 	</tr>
 	
 	<tr>
-		<td class="leftcol"><label for="objective">Objective</label></td>
+		<td class="leftcol"><label for="version">Date</label></td>
+		<td><b>:</b></td>
+		<td><%=h @topic.date_plan %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Trainer/Lecturer</label></td>
+		<td><b>:</b></td>
+		<td><%=h @topic.creator_id.blank? ? "-" : @topic.creator.staff_name_with_title %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Learners/Trainees</label></td>
+		<td><b>:</b></td>
+		<td><%=h @topic.class_id.blank? ? "-" : @topic.class_plan.name %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="creator_id">Location</label></td>
+		<td><b>:</b></td>
+		<td><%=h @topic.location_id.blank? ? "-" : @topic.loc_plan.location_list%></td>
+	</tr>
+	
+   	<tr>
+		<td class="leftcol"><label for="activity">Learning Outcomes</label></td>
+		<td><b>:</b></td>
+		<td><%=raw sanitize(simple_format(@topic.learning_outcome), :tags => %w(br) ) %></td>
+	</tr>
+	
+	<tr>
+			<td class="leftcol"><label for="version">The Training Methods I will use</label></td>
+		<td><b>:</b></td>
+		<td><%=raw sanitize(simple_format(@topic.version), :tags => %w(br) ) %></td>
+	</tr>
+	
+	<tr>
+		<td class="leftcol"><label for="objective">My introduction to this training will include</label></td>
 		<td><b>:</b></td>
 		<td><%=raw sanitize(simple_format(@topic.objective), :tags => %w(br) ) %></td>
 	</tr>
 	
 	<tr>
-		<td class="leftcol"><label for="content">Content</label></td>
+		<td class="leftcol"><label for="content">The main points I will cover in the body (content) of my training will be</label></td>
 		<td><b>:</b></td>
 		<td><%=raw sanitize(simple_format(@topic.content), :tags => %w(br) ) %></td>
 	</tr>
 	
 	<tr>
-		<td class="leftcol"><label for="activity">Activity</label></td>
+		<td class="leftcol"><label for="activity">My conclusion/summary will cover</label></td>
 		<td><b>:</b></td>
 		<td><%=raw sanitize(simple_format(@topic.activity), :tags => %w(br) ) %></td>
 	</tr>
+	<tr>
+		<td class="leftcol"><label for="activity">How I will assess competencies</label></td>
+		<td><b>:</b></td>
+		<td><%=raw sanitize(simple_format(@topic.competency), :tags => %w(br) ) %></td>
+	</tr>
 	
 	<tr>
-		<td class="leftcol"><label for="creator_id">Created By</label></td>
+		<td class="leftcol"><label for="activity">Things that I will need to organise before I do my training</label></td>
 		<td><b>:</b></td>
-		<td> <%=h @topic.created_details %></td>
+		<td><%=raw sanitize(simple_format(@topic.organise_training), :tags => %w(br) ) %></td>
 	</tr>
-	</table>
+	
+	<tr>
+		<td class="leftcol"><label for="activity">The resources, materials and training aids I will need</label></td>
+		<td><b>:</b></td>
+		<td><%=raw sanitize(simple_format(@topic.material_training), :tags => %w(br) ) %></td>
+	</tr>
 
-	<H2>Training Notes</H2>
-		<table width=80% border=1 cellspacing=0>
-              <tr>
-	            <th width=3%>No</th>
-				<th ><label for="data"><%= t 'document.uploaded' %></label></th>
-				<th ><label for="closed">Title Document</label></th>
-				<th ><label for="closed">Release Date</label></th>
-			  </tr>
+	</table>
+<H2>Lesson Plan Details</H2>
+<table width=100% border=1 cellspacing=0>
+     <tr>
+	     <th width=3%>Timing</th>
+		 <th ><label for="data">Learning Objective</label></th>
+		 <th ><label for="closed">Main Tasks / Process</label></th>
+		 <th ><label for="closed">Resources/Tools</label></th>
+	</tr>
 			
-			  <% bil = 0 %>
-             	<% for training_note in @topic.training_notes %>   
-               <% bil += 1 %>
-			<tr>
-			
-			<td><%= bil %></td>
-			<td><% if training_note.document.exists? then %>
+			<% for lesson_plan in @topic.lesson_plans %>   
+              
+	<tr>
+		<td><%= lesson_plan.timing %> MIN</td>
+		<td><%= lesson_plan.objective %></td>
+		<td><%=raw sanitize(simple_format(lesson_plan.task), :tags => %w(br) ) %></td>
+		<td><%= lesson_plan.tool %></td>
+	</tr>	
+	
+	<% end %>
+	
+</table>
+<H2>Training Notes</H2>
+<table width=80% border=1 cellspacing=0>
+    <tr>
+	     <th width=3%>No</th>
+		 <th ><label for="data"><%= t 'document.uploaded' %></label></th>
+		 <th ><label for="closed">Title Document</label></th>
+		 <th ><label for="closed">Release Date</label></th>
+	</tr>
+			<% bil = 0 %>
+             <% for training_note in @topic.training_notes %>   
+            <% bil += 1 %>
+	<tr>
+		<td><%= bil %></td>
+		<td><% if training_note.document.exists? then %>
 				<%= training_note.document_file_name %>
 				<%= link_to (t 'document.download'), training_note.document.url %> 
 				<% else %>
 				<i>No File Available</i>
 				<% end %></td>
-				<td><%=h training_note.title %></td>
-				<td><%=h training_note.release.blank? ? "-" : training_note.release.strftime("%d %b %Y")  %></td>
-		</tr>
-		
-	
-		
+		<td><%=h training_note.title %></td>
+		<td><%=h training_note.release.blank? ? "-" : training_note.release.strftime("%d %b %Y")  %></td>
+	</tr>	
 	<% end %>
+	
 	</table>
 
 <% if @topic.approvedby_id != nil %>
@@ -122,21 +193,6 @@
 
 	</table>
 <% end %>
-
-
-<!--	<H2>Checking</H2>
-	<table>
-	
-	
-	<tr>
-		<td class="leftcol"><label for="checkcode">Checking Code:</label></td>
-		<td><#%=h @topic.checkcode %></td>
-	</tr>
-	<tr>
-		<td class="leftcol"><label for="checkdate">Check Date:</label></td>
-		<td><#%=h @topic.checkdate %></td>
-	</tr>
-</table>-->
 
 </div>
 <BR>

@@ -173,7 +173,7 @@ authorization do
       if_attribute :cc1staff_id => is {User.current_user.staff_id}
     end
       
-    has_permission_on :documents, :to => [:index, :show, :action1, :update] do 
+    has_permission_on :documents, :to => [:index, :show, :action2, :update] do 
       if_attribute :cc2closed => nil
     end
     
@@ -192,6 +192,7 @@ authorization do
 role :head_officer do
     has_permission_on :users, :to => :create
     has_permission_on :books, :to => :core
+    has_permission_on :instructors,   :to => [:menu, :show] 
 	  has_permission_on :examquestions, :to => [:menu, :show]
 	  has_permission_on :locations, :to => [:menu, :show]
 	  has_permission_on :grades, :to => [:menu, :show]
@@ -293,10 +294,12 @@ end
    has_permission_on :evaluate_lecturers, :to => [:manage, :penilaipensyarah] 
    
    # Instructor Appraisal
-   has_permission_on :evaluate_coaches, :to => [:manage, :penilaijurulatih] 
+   #has_permission_on :evaluate_coaches, :to => [:manage, :penilaijurulatih] 
   
    # Examination Question Bank
    has_permission_on :examquestions, :to => :manage 
+   
+   has_permission_on :instructors, :to => :manage 
    
    # Examination Maker 
   # has_permission_on :exammakers, :to => :manage
@@ -344,7 +347,12 @@ end
     has_permission_on [:topics, :trainingreports, :training_notes],  :to => :manage
     
     # Timetable / Schedulling
-    # has_permission_on :timetables, :to => [:create, :index, :show, :edit, :update, :menu, :calendar]  
+    # has_permission_on :timetables, :to => [:create, :index, :show, :edit, :update, :menu, :calendar] 
+    
+    # Instructor Appraisal
+     has_permission_on :instructors, :to => [:menu, :index, :create, :edit, :update, :delete]  do #Applicant
+         if_attribute :staff_id => is {User.current_user.staff_id}
+     end
      
     # Examination Question Bank
     has_permission_on :examquestions, :to =>  [:index, :show, :edit, :update, :manage, :analysis_form] do  

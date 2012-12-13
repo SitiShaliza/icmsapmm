@@ -1,7 +1,5 @@
 class Position < ActiveRecord::Base
   
-  
-  
   has_many :commandant, :class_name => 'Sdicipline', :foreign_key => 'commandant_id'
   has_many :counsellor, :class_name => 'Sdicipline', :foreign_key => 'caunsellor_id' 
   has_many :hod, :class_name => 'Travelrequest', :foreign_key => 'hod_id'
@@ -10,13 +8,14 @@ class Position < ActiveRecord::Base
   has_many :warden, :class_name => 'Sdicipline', :foreign_key => 'warden_id'
   has_many :subordinates, :class_name => 'Position', :foreign_key => 'parent_id'
   has_many :editor, :class_name => 'Examquestion', :foreign_key => 'editor_id'
+  has_many :checker, :class_name => 'Instructor', :foreign_key => 'check_qc'
   has_many :approverqc, :class_name => 'Examquestion', :foreign_key => 'approver_id'
   belongs_to :bosses, :class_name => 'Position', :foreign_key => 'parent_id'
   belongs_to :staffgrade, :class_name => 'Employgrade', :foreign_key => 'staffgrade_id'
   belongs_to :staff
   has_many :approvers,   :class_name => 'Topic',    :foreign_key => 'approvedby_id'
   has_many :approver, :class_name => 'leaveforstudents', :foreign_key => 'staff_id'
-
+ 
   validates_uniqueness_of :positioncode
   validates_presence_of :positioncode
   

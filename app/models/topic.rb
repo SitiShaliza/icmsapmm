@@ -9,14 +9,19 @@ class Topic < ActiveRecord::Base
   belongs_to :subject#,   :class_name => 'Subject', :foreign_key => 'subject_id'
   belongs_to :creator,   :class_name => 'Staff',   :foreign_key => 'creator_id'
   belongs_to :approver,  :class_name => 'Position',   :foreign_key => 'approvedby_id'
+  belongs_to :class_plan,  :class_name => 'Klass',   :foreign_key => 'class_id'
+  belongs_to :loc_plan, :class_name => 'Location', :foreign_key => 'location_id'
   
   validates_presence_of    :topic_code, :sequenceno, :name
   validates_uniqueness_of  :sequenceno, :scope => :subject_id, :message => 'This sequence is already taken'
   
-   has_many :training_notes, :dependent => :destroy
-   accepts_nested_attributes_for :training_notes, :reject_if => lambda { |a| a[:title].blank? }
+  has_many :training_notes, :dependent => :destroy
+  accepts_nested_attributes_for :training_notes, :reject_if => lambda { |a| a[:title].blank? }
    
-  #  attr_accessible :document, :title, :version, :release
+  has_many :lesson_plans, :dependent => :destroy
+  accepts_nested_attributes_for :lesson_plans, :reject_if => lambda { |a| a[:objective].blank? }
+   
+ #  attr_accessible :timing, :objective, :task, :tool
 
   def topic_subject
      "#{subject_topic} - #{name}"
@@ -30,7 +35,7 @@ class Topic < ActiveRecord::Base
      if subject_id == nil
        ""
      elsif checker == []
-       "-"
+       "N/A"
      else
        subject.name
      end
