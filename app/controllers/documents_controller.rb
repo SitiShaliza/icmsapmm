@@ -41,9 +41,11 @@ class DocumentsController < ApplicationController
   
   def action1
      @document = Document.find(params[:id])
-   end
+  end
    
-  
+  def feedback
+    @document = Document.find(params[:id])
+  end
   
   def download
     @document = Document.find(params[:id])
@@ -57,9 +59,9 @@ class DocumentsController < ApplicationController
   def create
   @document = Document.new(params[:document])
  # @document = Document.new
-# 	@document.staff_ids = []
+ # 	@document.staff_ids = []
  #	@document.staff_ids = Document.set_recipient(params[:document][:cc2_staff])			#refer model/message.rb - line 37-49
-#	@document.document = params[:document][:document]
+ #	@document.document = params[:document][:document]
     respond_to do |format|
       if @document.save
         flash[:notice] = 'Document was successfully created.'
@@ -75,23 +77,23 @@ class DocumentsController < ApplicationController
   # PUT /documents/1
   # PUT /documents/1.xml
   def update
-   raise params.inspect
+  # raise params.inspect
     	@document = Document.find(params[:id])
-      @document.staff_ids = []
-      @document.staff_ids = Document.set_recipient(params[:document][:cc2_staff])		
-      @document.cc1date     = Date.civil(params[:document][:"cc1date(1i)"].to_i,params[:document][:"cc1date(2i)"].to_i,params[:document][:"cc1date(3i)"].to_i)
-      @document.cc1remarks  = params[:document][:cc1remarks]
-      @document.cc1action   = params[:document][:cc1action]
-      @document.cc1closed   = params[:document][:cc1closed]
-      @document.cc2date     = Date.civil(params[:document][:"cc2date(1i)"].to_i,params[:document][:"cc2date(2i)"].to_i,params[:document][:"cc2date(3i)"].to_i)
-      @document.cc2remarks  = params[:document][:cc2remarks]
-      @document.cc2action   = params[:document][:cc2action]
-      @document.cc2closed   = params[:document][:cc2closed]
+    #  @document.staff_ids = []
+    #  @document.staff_ids = Document.set_recipient(params[:document][:cc2_staff])		
+    #  @document.cc1date     = Date.civil(params[:document][:"cc1date(1i)"].to_i,params[:document][:"cc1date(2i)"].to_i,params[:document][:"cc1date(3i)"].to_i)
+    #  @document.cc1remarks  = params[:document][:cc1remarks]
+    #  @document.cc1action   = params[:document][:cc1action]
+    #  @document.cc1closed   = params[:document][:cc1closed]
+    #  @document.cc2date     = Date.civil(params[:document][:"cc2date(1i)"].to_i,params[:document][:"cc2date(2i)"].to_i,params[:document][:"cc2date(3i)"].to_i)
+    #  @document.cc2remarks  = params[:document][:cc2remarks]
+    #  @document.cc2action   = params[:document][:cc2action]
+    #  @document.cc2closed   = params[:document][:cc2closed]
     respond_to do |format|
-      if @document.update_attributes(:staff_ids => @document.staff_ids, :cc1date => @document.cc1date, :cc1remarks => @document.cc1remarks, :cc1action => @document.cc1action,
-         :cc1closed => @document.cc1closed, :cc2date => @document.cc2date, :cc2remarks => @document.cc2remarks, :cc2action => @document.cc2action,
-            :cc2closed => @document.cc2closed)
-    # if @document.update_attributes(params[:document])
+    #  if @document.update_attributes(:staff_ids => @document.staff_ids, :cc1date => @document.cc1date, :cc1remarks => @document.cc1remarks, :cc1action => @document.cc1action,
+    #     :cc1closed => @document.cc1closed, :cc2date => @document.cc2date, :cc2remarks => @document.cc2remarks, :cc2action => @document.cc2action,
+    #        :cc2closed => @document.cc2closed)
+     if @document.update_attributes(params[:document])
         flash[:notice] = 'Document was successfully updated.'
         format.html { redirect_to(@document) }
         format.xml  { head :ok }
@@ -102,6 +104,7 @@ class DocumentsController < ApplicationController
     end
   end
   
+ 
 
   # DELETE /documents/1
   # DELETE /documents/1.xml

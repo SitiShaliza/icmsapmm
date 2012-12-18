@@ -1,4 +1,4 @@
-<h3>Action 2</h3>
+<h3>Action by Second Circulation II </h3>
 
 <% form_for(@document) do |f| %>
   <%= f.error_messages %>
@@ -28,13 +28,13 @@
 			<tr>
 				<td class="leftcol"><label for="letterdt"><%= t 'document.letterdt' %></label></td>
 				<td><b>:</b></td>
-				<td> <%=h l(@document.letterdt) %></td>
+				<td> <%=h @document.letterdt.strftime("%d %b %Y") %></td>
 			</tr>
 
 			<tr>
 				<td class="leftcol"><label for="letterxdt"><%= t 'document.letterxdt' %></label></td>
 				<td><b>:</b></td>
-				<td><%=h l(@document.letterxdt) %></td>
+				<td><%=h @document.letterxdt.strftime("%d %b %Y") %></td>
 			</tr>
 
 			<tr>
@@ -70,7 +70,7 @@
 				    <%= link_to (t 'document.download'), @document.data.url %> ||
 			        <%= link_to "ALT", @document.data.url %>
 				    <% else %>
-				    No File Available
+				    <i>No File Available</i>
 				    <% end %></td>
 			</tr>
 			<tr>
@@ -108,9 +108,16 @@
 			<tr>
 				<td class="leftcol"><label for="closed">Forward To</label></td>
 				<td><b>:</b></td>
-				<td>	<% for document_staffs in @document.staffs %>
-							<%=h document_staffs.staff_name_with_title %><br>
-					<% end %></td>
+				<td><table width=50% border=1 cellspacing=0>
+					<tr>
+						<th>Staff Name</th>
+						<th>Tindakan</th>
+					</tr>	<% for circulate in @document.circulates %>	
+					<tr>
+						<td><%=h circulate.circulate_name.staff_name_with_title %></td>
+						<td> <%=h (Circulate::ACTION.find_all{|disp, value| value == circulate.action_cc}).map {|disp, value| disp} %></td><% end %>
+						</tr>
+					</table></td>
 			</tr>
 
 			<tr>
@@ -124,6 +131,22 @@
 
 	<table  width=100%>
 		<tr>
+			<td class="leftcol"><label for="data">Current Attachment</label></td>
+			<td><b>:</b></td>
+			<td><% if @document.data.exists? then %>
+			    <%= @document.data_file_name %>
+			    <%= link_to (t 'document.download'), @document.data.url %> ||
+		        <%= link_to "ALT", @document.data.url %>
+			    <% else %>
+			    <i>No File Available</i>
+			    <% end %></td>
+		</tr>
+		<tr>
+			<td class="leftcol"><label for="data">Upload File/Change File</label></td>
+			<td><b>:</b></td>
+			<td><%= f.file_field :data %> <font color="grey", size="-2">MsWord / MsExcel / Pdf / JPG</font></td>
+		</tr>
+		<tr>
 			<td class="leftcol"><label for="closed">Feedback:</label></td>
 			<td width=3%><b>:</b></td>
 			<td><%= f.text_area :cc2action, :size => '40x2' %></td>
@@ -132,6 +155,24 @@
 			<td class="leftcol"><label for="closed">Remarks:</label></td>
 			<td><b>:</b></td>
 			<td><%= f.text_area :cc2remarks, :size => '40x3' %></td>
+		</tr>
+		
+		<tr>
+			<td class="leftcol"><label for="action_by">Action Taken By</label></td>
+			<td><b>:</b></td>
+			<td><%= f.collection_select :action_by, Staff.find(:all, :include => [:title], :order => 'titles.id ASC', :conditions => {:id => [34,35,36,40,37,39,38,63,60,74]}), :id,    
+			                                                            :staff_name_with_title, :include_blank => true  %></td>
+		</tr>
+		
+		<tr>
+			<td class="leftcol"><label for="cc2date">Date:</label></td>
+			<td width=3%><b>:</b></td>
+			<td><%= f.date_select :cc2date, :start_year => 2012, :end_year => 2020, :order => [:day, :month, :year], :include_blank => true %></td>
+		</tr>
+		<tr>
+			<td class="leftcol"><label for="feedback_sent">Sent?</label></td>
+			<td><b>:</b></td>
+			<td><%= f.check_box :feedback_sent %><font color="grey", size="-2">Tick to send feedback to Circulation 1 Staff </font></td>
 		</tr>
 		<tr>
 			<td class="leftcol"><label for="closed">Close?:</label></td>
@@ -143,7 +184,7 @@
 	
 </div>
   <p>
-     <%= f.submit 'Update1' %>
+     <%= f.submit 'Update' %>
   </p>
 
 <% end %>

@@ -107,9 +107,16 @@
 		<tr>
 			<td class="leftcol"><label for="closed">Forward To</label></td>
 			<td><b>:</b></td>
-			<td>	<% for document_staffs in @document.staffs %>
-						<%=h document_staffs.staff_name_with_title %><br>
-				<% end %></td>
+			<td><table width=100% border=1 cellspacing=0>
+				<tr>
+					<th>Staff Name</th>
+					<th>Tindakan</th>
+				</tr>	<% for circulate in @document.circulates %>	
+				<tr>
+					<td><%=h circulate.circulate_name.staff_name_with_title %></td>
+					<td> <%=h (Circulate::ACTION.find_all{|disp, value| value == circulate.action_cc}).map {|disp, value| disp} %></td><% end %>
+					</tr>
+				</table></td>
 		</tr>
 		
 		<tr>
@@ -122,8 +129,15 @@
 	<% end %>
 
 	<% if @document.cc2action != nil %>
-	<H2>Circulation 2 </H2>
+		<H2>Circulation 2 (<% for circulate in @document.circulates %>	
+			 <%=h circulate.circulate_name.staff_name_with_title %>,
+			<% end %>)</H2>
 	<table  width=100%>
+		<tr>
+			<td class="leftcol"><label for="data"><%= t 'document.uploaded' %></label></td>
+			<td><b>:</b></td>
+			<td></td>
+		</tr>
 		<tr>
 			<td class="leftcol"><label for="closed">Action</label></td>
 			<td width=2%><b>:</b></td>
@@ -135,17 +149,54 @@
 			<td><%=h @document.cc2remarks %></td>
 		</tr>
 		<tr>
-			<td class="leftcol"><label for="closed">Close?</label></td>
+			<td class="leftcol"><label for="action_by">Action Taken By</label></td>
 			<td><b>:</b></td>
-			<td><%=h @document.cc2closed? ? "Closed" : "" %>
+			<td><%=h @document.action_by.blank? ? "-" : @document.actiontaken.staff_name_with_title %></td>
 		</tr>
+		
 		<tr>
 			<td class="leftcol"><label for="cc2date">Date</label></td>
 			<td><b>:</b></td>
 			<td><%=h @document.cc2date.blank? ? "-" : @document.cc2date.strftime("%d-%b-%Y") %></td>
 		</tr>
 		
+		<tr>
+			<td class="leftcol"><label for="closed"> Feedback Sent?</label></td>
+			<td><b>:</b></td>
+			<td><%=h @document.feedback_sent? ? "Yes" : "No" %>
+		</tr>
+		
+		<tr>
+			<td class="leftcol"><label for="closed">Close?</label></td>
+			<td><b>:</b></td>
+			<td><%=h @document.cc2closed? ? "Closed" : "" %>
+		</tr>
+		
+		
 	</table>
-<% end %>		
+<% end %>	
+
+	<% if @document.feedback_sent == TRUE %>
+	<H2>Checking Document By <%=h @document.circulation1_details %> </H2>
+	<table width=100% border=0>
+		<tr>
+			<td class="leftcol"><label for="closed">Received?</label></td>
+			<td width=3%><b>:</b></td>
+			<td><%=h @document.received? ? "Yes" : "No" %></td>
+		</tr>
+
+		<tr>
+			<td class="leftcol"><label for="cc1date">Received Date:</label></td>
+			<td width=3%><b>:</b></td>
+			<td><%=h @document.received_date.blank? ? "-" : @document.received_date.strftime("%d-%b-%Y") %></td>
+		</tr>
+		
+		<tr>
+			<td class="leftcol"><label for="closed">Close?:</label></td>
+			<td><b>:</b></td>
+			<td><%=h @document.closed? ? "Closed" : "" %></td>
+		</tr>
+</table>
+<% end %>	
 </div>
 <BR>

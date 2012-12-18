@@ -10,10 +10,13 @@ validates_presence_of :refno, :category, :title, :letterdt, :letterxdt, :from, :
 belongs_to :stafffilled,    :class_name => 'Staff', :foreign_key => 'stafffiled_id'
 belongs_to :cc1staff, :class_name => 'Staff', :foreign_key => 'cc1staff_id' 
 belongs_to :cc2staff, :class_name => 'Staff', :foreign_key => 'cc2staff_id'
+belongs_to :actiontaken, :class_name => 'Staff', :foreign_key => 'action_by'
 belongs_to :cofile, :foreign_key => 'file_id'
 
 before_save :set_actionstaff2_to_blank_if_close_is_selected
 
+has_many :circulates, :dependent => :destroy
+accepts_nested_attributes_for :circulates, :reject_if => lambda { |a| a[:cc_staff].blank? }
 
 def set_actionstaff2_to_blank_if_close_is_selected
     if cc1closed == true
@@ -41,16 +44,16 @@ def cc2_staff=(name)
 end
 
     
-def self.set_recipient(recipients)
-  	recipient_no_wspace = recipients.gsub(/(\s+, +|,\s+|\s+,)/,',')			#remove whitespace - result :"Saa, Sul ,Ali , Abu" become "Saa,Sul,Ali,Abu"
-  	@cc2_staff_A = recipient_no_wspace.split(",")								          #assign recipient string into array - result : ["Saadah","Sulijah"]
-  	@to_id_A = []
-     	@cc2_staff_A.each do |cc2_staff|
-     		aa = Staff.find_by_name(cc2_staff).id									
-     		@to_id_A << aa.to_i													#result(sample)- ["1","7"]
-     	end
-  	return @to_id_A
-end
+#def self.set_recipient(recipients)
+#  	recipient_no_wspace = recipients.gsub(/(\s+, +|,\s+|\s+,)/,',')			#remove whitespace - result :"Saa, Sul ,Ali , Abu" become "Saa,Sul,Ali,Abu"
+#  	@cc2_staff_A = recipient_no_wspace.split(",")								          #assign recipient string into array - result : ["Saadah","Sulijah"]
+#  	@to_id_A = []
+#     	@cc2_staff_A.each do |cc2_staff|
+#     		aa = Staff.find_by_name(cc2_staff).id									
+#     		@to_id_A << aa.to_i													#result(sample)- ["1","7"]
+#     	end
+#  	return @to_id_A
+#end
 
 def filedocer
     suid = file_id
@@ -89,7 +92,11 @@ end
                         :message => "Invalid File Format" 
  validates_attachment_size :data, :less_than => 5.megabytes
 
-
+ #has_attached_file :doc
+# validates_attachment_content_type :doc, :content_type => ['application/pdf', 'application/msword','application/msexcel','image/png','text/plain'],
+#                         :storage => :file_system,
+#                         :message => "Invalid File Format" 
+# validates_attachment_size :doc, :less_than => 5.megabytes
 #----------------Coded List----------------------------------- 
 CATEGORY = [
         #  Displayed       stored in db

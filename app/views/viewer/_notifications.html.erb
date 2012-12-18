@@ -16,11 +16,11 @@
     <% dash_ip = Instructor.count(:all, :conditions => ["qcsent =?", true]) %>
 
 	<% if (d & c == c) && dash_ip > 0 %>
-  <p><%= dash_ip %> <%= link_to "Instructor Appraisal for Check", { :controller => "instructors", :action => "index" } %></p>
-  <% else %>
+    <p><%= dash_ip %> <%= link_to "Instructor Appraisal for Check", { :controller => "instructors", :action => "index" } %></p>
+    <% else %>
 	<% end %>
-  	<!-- Notification for Travel Request -->
-   
+  	
+    <!-- Notification for Travel Request -->
   	<% c = Position.find(:all, :select => "positionname", :conditions => ['positions.id =?', 51]).map(&:positionname) %>
   	<% d = User.current_user.id.to_a %>
   	<% dash_lfs = Travelrequest.count(:all, :conditions => ["hod_id =? AND hod_approved IS ?", 51, nil]) %>
@@ -120,10 +120,10 @@
 	<% end %>
 	
 	<!-- Notification for Documents (CC2 Staff)-->
-	<% mydocs = Circulate.count(:all, :conditions => ["cc_staff=?", User.current_user.staff_id]) %>
-  <% if mydocs > 0 %>
-  	<%= mydocs %> <%= link_to "New Documents for Your Attention", { :controller => "documents", :action => "index" } %><br>
-  <% else %>
+	<% mydocs1 = Document.count(:all, :conditions => ["cc1staff_id=? AND feedback_sent =? ", User.current_user.staff_id, true]) %>
+    <% if mydocs1 > 0 %>
+  	<%= mydocs1 %> <%= link_to "New Feedback Document Received ", { :controller => "documents", :action => "index" } %><br>
+    <% else %>
 	<% end %>
 
  <!-- Notification for Topic/Lesson Plan -->

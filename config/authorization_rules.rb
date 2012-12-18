@@ -167,20 +167,17 @@ authorization do
     
 	#Documents Management
     
-    has_permission_on :documents, :to => [:manage, :create] 
+    has_permission_on :documents, :to => [:menu, :create] 
     
-    has_permission_on :documents, :to => [:index, :show, :action1, :update] do 
+    has_permission_on :documents, :to => [:action1, :edit, :delete, :feedback] do 
       if_attribute :cc1staff_id => is {User.current_user.staff_id}
     end
       
-    has_permission_on :documents, :to => [:index, :show, :action2, :update] do 
-      if_attribute :cc2closed => nil
+    has_permission_on :documents, :to => [:action2, :edit, :delete] do 
+      if_attribute :cc2action => nil
     end
-    
-    # Student Leave
-     has_permission_on :leaveforstudents, :to => [:index, :show, :update, :approve, :borang_cuti_pelatih] do
-        if_attribute :studentsubmit => true
-    end
+   
+ 
     
   #Student Dicipline
     has_permission_on :sdiciplines, :to => [:index, :show, :create, :update] do 
@@ -213,7 +210,7 @@ end
      has_permission_on :leaveforstaffs, :to => [:index, :show, :update, :destroy, :office, :cuti_rehat, :leaveforhours] do
        if_attribute :submit => true
      
-     has_permission_on :documents, :to => :manage
+     
      end
   end
   
@@ -242,10 +239,12 @@ end
      
 # File Registry
      has_permission_on :cofiles, :to => [:manage, :update, :delete]
+     has_permission_on :documents, :to => [:update, :delete, :create]
    end
   
 # Students
 role :student do
+ # has_permission_on :examquestions, :to => [:show,:menu]
   
  # has_permission_on :staffs, :to => [:read, :menu]
   has_permission_on [:students, :programmes, :timetables,:books,:librarytransactions], :to => :menu
@@ -291,7 +290,7 @@ end
     has_permission_on :students, :to => :menu
     
    # Lecturer Appraisal
-   has_permission_on :evaluate_lecturers, :to => [:manage, :penilaipensyarah] 
+   has_permission_on :evaluate_lecturers, :to => [:menu, :show, :penilaipensyarah] 
    
    # Instructor Appraisal
    #has_permission_on :evaluate_coaches, :to => [:manage, :penilaijurulatih] 
