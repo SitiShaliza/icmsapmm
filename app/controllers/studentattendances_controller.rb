@@ -2,7 +2,7 @@ class StudentattendancesController < ApplicationController
   # GET /studentattendances
   # GET /studentattendances.xml
   def index
-    @studentattendances = Studentattendance.all
+    @studentattendances = Studentattendance.find(:all, :order => 'id ASC')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -57,7 +57,8 @@ class StudentattendancesController < ApplicationController
   # PUT /studentattendances/1
   # PUT /studentattendances/1.xml
   def update
-    @studentattendance = Studentattendance.find(params[:id])
+  #  params[:tudentattendance][:student_ids] ||= []
+  @studentattendance = Studentattendance.find(params[:id])
 
     respond_to do |format|
       if @studentattendance.update_attributes(params[:studentattendance])
@@ -82,4 +83,13 @@ class StudentattendancesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def view_class
+     @timetable_id = params[:timetableid]
+     @studentattendance_id = params[:studentattendanceid]
+     unless @timetable_id.blank? 
+       @students = Student.find(:all, :joins => :klasses,:conditions => ['klass_id=?', @timetable_id])
+     end
+     render :partial => 'view_class', :layout => false
+   end
 end
